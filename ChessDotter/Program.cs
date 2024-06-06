@@ -22,9 +22,6 @@ namespace ChessDotter
                 StudyApi studyApi = new StudyApi(x.PersonalAccessToken);
                 List<GamePgn> gamePgns = studyApi.GetStudyGames(x.StudyId).Result;
                 PieceLocationDrawer.DrawPieceLocations(gamePgns);
-
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
             }).WithNotParsed(x =>
             {
                 Console.WriteLine("Invalid arguments...");
