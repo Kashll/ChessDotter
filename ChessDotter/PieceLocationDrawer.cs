@@ -14,14 +14,14 @@ class PieceLocationDrawer
     public static void DrawPieceLocations(List<GamePgn> games)
     {
         int i = 0;
-        IEnumerable<List<Piece>> piecesPerGame = games.Select(x => x.Pgn).Select(GetPieces);
-        foreach (List<Piece> pieces in piecesPerGame)
+        foreach (GamePgn gamePgn in games)
         {
-            DrawPieceLocations(pieces, Path.Combine(Directory.GetCurrentDirectory(), $"Chapter{++i}.png"));
+            List<Piece> pieces = GetPieces(gamePgn.Pgn);
+            DrawPieceLocations(pieces, gamePgn.IsWhiteOrientation, Path.Combine(Directory.GetCurrentDirectory(), $"Chapter{++i}.png"));
         }
     }
 
-    private static void DrawPieceLocations(List<Piece> gamePieces, string destinationPath)
+    private static void DrawPieceLocations(List<Piece> gamePieces, bool isWhiteOrientation, string destinationPath)
     {
         byte[] boardBytes = Resources.board;
         using (MemoryStream boardStream = new MemoryStream(boardBytes))
@@ -33,6 +33,12 @@ class PieceLocationDrawer
 
             foreach (Piece piece in gamePieces)
             {
+                if (!isWhiteOrientation)
+                {
+                    piece.Position.X = (byte) int.Abs(piece.Position.X - 7);
+                    piece.Position.Y = (byte) int.Abs(piece.Position.Y - 7);
+                }
+
                 int positionX = (int) Math.Ceiling((piece.Position.X + 1) * squareWidth - squareWidth / 2.0);
                 int positionY = (int) Math.Ceiling((8 - piece.Position.Y)  * squareHeight - squareHeight / 2.0);
                 DrawCircle(boardImage, new Point(positionX, positionY), 12);
