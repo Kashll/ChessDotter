@@ -1,0 +1,15 @@
+bin/
+build/
+obj/
+.vs/
+
+*.suo
+*.csproj.user
+_ReSharper.*
+*.DotSettings.user
+*.resharper.user
+*.ReSharper.user
+*.nupkg
+
+
+*.v2
