@@ -11,10 +11,10 @@ namespace ChessDotter;
 
 class PieceLocationDrawer
 {
-    public static void DrawPieceLocations(List<string> gamePgns)
+    public static void DrawPieceLocations(List<GamePgn> games)
     {
         int i = 0;
-        IEnumerable<List<Piece>> piecesPerGame = gamePgns.Select(GetPieces);
+        IEnumerable<List<Piece>> piecesPerGame = games.Select(x => x.Pgn).Select(GetPieces);
         foreach (List<Piece> pieces in piecesPerGame)
         {
             DrawPieceLocations(pieces, Path.Combine(Directory.GetCurrentDirectory(), $"Chapter{++i}.png"));
@@ -53,7 +53,6 @@ class PieceLocationDrawer
     private static List<Piece> GetPieces(string pgn)
     {
         Game game = Pgn.MapString(pgn);
-
         List<Piece> statePieces = game.State.Pieces;
 
         return statePieces;

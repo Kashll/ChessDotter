@@ -19,14 +19,19 @@ public class StudyApi
         _lichessClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
     }
 
-    public Task<List<string>> GetStudyPgns(string studyId)
+    public Task<List<GamePgn>> GetStudyGames(string studyId)
     {
-        string endpoint = $"{StudyEndpoint}{studyId}.pgn";
-        return _lichessClient.GetStringAsync(endpoint).ContinueWith(x => SplitPgnResponse(x.Result));
+        string endpoint = $"{StudyEndpoint}{studyId}.pgn?orientation=true";
+        return _lichessClient.GetStringAsync(endpoint).ContinueWith(x => SplitPgnResponse(x.Result).Select(GetGame).ToList());
     }
 
     private static List<string> SplitPgnResponse(string pgnResponse)
     {
         return pgnResponse.Split("\n\n\n", StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+
+    private static GamePgn GetGame(string pgn)
+    {
+        return new GamePgn(pgn);
     }
 }

@@ -20,7 +20,7 @@ namespace ChessDotter
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(x =>
             {
                 StudyApi studyApi = new StudyApi(x.PersonalAccessToken);
-                List<string> gamePgns = studyApi.GetStudyPgns(x.StudyId).Result;
+                List<GamePgn> gamePgns = studyApi.GetStudyGames(x.StudyId).Result;
                 PieceLocationDrawer.DrawPieceLocations(gamePgns);
 
                 Console.WriteLine("Press any key to exit...");
