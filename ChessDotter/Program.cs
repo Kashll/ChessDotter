@@ -13,6 +13,12 @@ namespace ChessDotter
 
             [Value(1, MetaName = "studyId", HelpText = "The Lichess study id to use", Required = true)]
             public string StudyId { get; set; }
+
+            [Option('p', "pawnsOnly", Required = false, HelpText = "Only draw pawns")]
+            public bool PawnsOnly { get; set; }
+
+            [Option('c', "displayPieceColors", Required = false, HelpText = "Display piece colors")]
+            public bool DisplayPieceColors { get; set; }
         }
 
         static void Main(string[] args)
@@ -21,7 +27,7 @@ namespace ChessDotter
             {
                 StudyApi studyApi = new StudyApi(x.PersonalAccessToken);
                 List<GamePgn> gamePgns = studyApi.GetStudyGames(x.StudyId).Result;
-                PieceLocationDrawer.DrawPieceLocations(gamePgns);
+                PieceLocationDrawer.DrawPieceLocations(gamePgns, x.PawnsOnly, x.DisplayPieceColors);
             }).WithNotParsed(x =>
             {
                 Console.WriteLine("Invalid arguments...");
