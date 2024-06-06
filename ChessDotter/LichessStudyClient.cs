@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ChessDotter;
 
-public class StudyApi
+public class LichessStudyClient
 {
     private readonly HttpClient _lichessClient = new HttpClient();
 
     private const string StudyEndpoint = @"https://lichess.org/api/study/";
 
-    public StudyApi(string personalAccessToken)
+    public LichessStudyClient(string personalAccessToken)
     {
         _lichessClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
     }

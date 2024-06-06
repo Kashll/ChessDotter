@@ -25,9 +25,11 @@ namespace ChessDotter
         {
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(x =>
             {
-                StudyApi studyApi = new StudyApi(x.PersonalAccessToken);
-                List<GamePgn> gamePgns = studyApi.GetStudyGames(x.StudyId).Result;
+                LichessStudyClient lichessStudyClient = new LichessStudyClient(x.PersonalAccessToken);
+                List<GamePgn> gamePgns = lichessStudyClient.GetStudyGames(x.StudyId).Result;
                 PieceLocationDrawer.DrawPieceLocations(gamePgns, x.PawnsOnly, x.DisplayPieceColors);
+
+                Console.WriteLine($"Generated images for {gamePgns.Count} study chapter(s)");
             }).WithNotParsed(x =>
             {
                 Console.WriteLine("Invalid arguments...");
