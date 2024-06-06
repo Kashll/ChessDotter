@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using ChessDotter.Properties;
@@ -27,29 +28,25 @@ class PieceLocationDrawer
         {
             Image boardImage = Image.FromStream(boardStream);
 
-            Bitmap boardBitmap = new Bitmap(boardImage);
-
-            double squareWidth = boardBitmap.Width / 8.0;
-            double squareHeight = boardBitmap.Height / 8.0;
+            double squareWidth = boardImage.Width / 8.0;
+            double squareHeight = boardImage.Height / 8.0;
 
             foreach (Piece piece in gamePieces)
             {
                 int positionX = (int) Math.Ceiling((piece.Position.X + 1) * squareWidth - squareWidth / 2.0);
                 int positionY = (int) Math.Ceiling((8 - piece.Position.Y)  * squareHeight - squareHeight / 2.0);
-                DrawCircle(boardBitmap, new Point(positionX, positionY), 10);
+                DrawCircle(boardImage, new Point(positionX, positionY), 12);
             }
 
-            boardBitmap.Save(destinationPath);
+            boardImage.Save(destinationPath);
         }
     }
 
-    private static void DrawCircle(Bitmap image, Point center, int radius)
+    private static void DrawCircle(Image image, Point center, int radius)
     {
-        for (int i = 0; i < 360; i++)
-        {
-            double x = center.X - radius * Math.Cos(2 * Math.PI / 360 * i);
-            double y = center.Y - radius * Math.Sin(2 * Math.PI / 360 * i);
-            image.SetPixel((int) x, (int) y, Color.Red);
+        using (Graphics graphics = Graphics.FromImage(image)) { 
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.FillEllipse(Brushes.Red, center.X - radius, center.Y - radius, radius * 2, radius * 2);
         }
     }
 
